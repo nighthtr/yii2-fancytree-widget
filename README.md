@@ -29,6 +29,6 @@ Once the extension is installed, simply use it in your code by  :
 
 ```php
 <?= \nighthtr\fancytree\Fancytree::widget([
-    'url' => Url::to(['tree/node'],
+    'url' => Url::to(['tree/node']),
 ]); ?>
 ```

@@ -10,7 +10,7 @@ use yii\web\JsExpression;
  *
  * <?php
  * echo \nighthtr\fancytree\Fancytree::widget([
- *     'url' => Url::to(['tree/node'],
+ *     'url' => Url::to(['tree/node']),
  * ]);
  * ?>
  */
@@ -28,15 +28,15 @@ class Fancytree extends \yii\base\Widget
         ],
         'glyph' => 'glyph_opts',
         'selectMode' => 2,
-        'source' => {
+        'source' => [
             'url' => Url::to(['tree/node']),
             'debugDelay' => 1000,
-        },
-        'wide' => {
+        ],
+        'wide' => [
             'iconWidth' => '1em',
             'iconSpacing' => '0.5em',
             'levelOfs' => '1.5em',
-        },
+        ],
         'icon' => new JsExpression("function(event, data) {
             // if( data.node.isFolder() ) {
             //     return 'glyphicon glyphicon-book';
