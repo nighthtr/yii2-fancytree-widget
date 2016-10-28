@@ -12,7 +12,8 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "bower-asset/fancytree": "~2"
+        "bower-asset/fancytree": "~2",
+        "nighthtr/yii2-fancytree-widget": "*"
     },
     "autoload": {
         "psr-4": {
