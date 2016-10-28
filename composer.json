@@ -1,0 +1,22 @@
+{
+    "name": "nighthtr/yii2-fancytree-widget",
+    "description": "Yii2 FancyTree widget",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","fancytree"],
+    "license": "BSD-4-Clause",
+    "authors": [
+        {
+            "name": "Ivan Timofeev",
+            "email": "nighthtr@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "bower-asset/fancytree": "~2"
+    },
+    "autoload": {
+        "psr-4": {
+            "nighthtr\\fancytree\\": "src"
+        }
+    }
+}
