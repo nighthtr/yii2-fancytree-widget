@@ -38,7 +38,7 @@ class Fancytree extends \yii\base\Widget
                 'dragEnter' => new JsExpression("function(node, data) { return false; }"),
                 'dragDrop' => new JsExpression("function(node, data) { data.otherNode.copyTo(node, data.hitMode); }"),
             ],
-            'source' => => [
+            'source' => [
                 'url' => $this->url,
                 'debugDelay' => 1000,
             ],
