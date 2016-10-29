@@ -104,7 +104,7 @@ class Fancytree extends \yii\base\Widget
             }
         ");
 
-        $view->registerJs("jQuery('#$id').nestable($options);");
+        $view->registerJs("jQuery('#$id').fancytree($options);");
 
         return Html::tag('div', 'test', ['id' => $id]);
 
