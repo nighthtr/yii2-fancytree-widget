@@ -16,6 +16,7 @@ class FancytreeAssets extends AssetBundle
     ];
     public $depends = [
         'yii\web\JqueryAsset',
+        'yii\jui\JuiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
 }
