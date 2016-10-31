@@ -108,8 +108,6 @@ class Fancytree extends \yii\base\Widget
 
         return Html::tag('div', 'test', ['id' => $id]);
 
-        echo $this->getId();
-
         echo "<pre>";
         print_r($this->options);
         echo "</pre>";
