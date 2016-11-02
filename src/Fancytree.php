@@ -20,6 +20,9 @@ use yii\web\JsExpression;
 class Fancytree extends \yii\base\Widget
 {
     public $url;
+    public $tagret;
+    public $maximumSelectionLength = 5;
+
     public $options = [
         'extensions' => ['dnd', 'edit', 'glyph', 'wide'],
         'checkbox' => true,
@@ -40,36 +43,70 @@ class Fancytree extends \yii\base\Widget
             $this->url = Url::to(['tree/node']);
         }
 
+        if (!empty($this->tagret)) {
+            $this->options = ArrayHelper::merge($this->options, [
+                'activate' => new JsExpression("function(event, data){
+                    data.node.setSelected(!data.node.isSelected());
+                }"),
+                'beforeSelect' => new JsExpression("function(event, data){
+                    if (!data.node.isSelected() && data.tree.getSelectedNodes().length >= {$this->maximumSelectionLength}) {
+                        return false;
+                    }
+                }"),
+                'select' => new JsExpression("function(event, data){
+                    var options = $('#{$this->tagret}').data('s2-options');
+                    var dataArray = [];
+                    var selectedArray = [];
+
+                    $.each(data.tree.getSelectedNodes(), function(index, node) {
+                        dataArray.push({id: node.key, text: node.title});
+                    });
+                    $.each(dataArray, function(index, item) {
+                        selectedArray.push(item.id);
+                    });
+
+                    if (selectedArray.length > {$this->maximumSelectionLength}) {
+                        return false;
+                    }
+
+                    $('#select2-product-category_ids').select2('data', dataArray);
+                    $('#select2-product-category_ids').val(selectedArray).trigger('change');
+
+                    // Object.assign(window[options], {data: dataArray});
+                    // console.log(window[options]);
+
+                    // $('#{$this->tagret}').select2('destroy');
+                    // $('#{$this->tagret}').show();
+                    // $('#{$this->tagret}').select2(window[options]);
+                    // $('#{$this->tagret}').val(selectedArray).trigger('change');
+
+                    // $('#{$this->tagret}').select2('data', {id: data.node.key, text: data.node.title});
+                    // $('#{$this->tagret}').val(data.node.key).trigger('change');
+                }"),
+            ]);
+        }
+
         $this->options = ArrayHelper::merge($this->options, [
-            'dnd' => [
-                'focusOnClick' => true,
-                'dragStart' => new JsExpression("function(node, data) { return true; }"),
-                'dragEnter' => new JsExpression("function(node, data) { return false; }"),
-                'dragDrop' => new JsExpression("function(node, data) { data.otherNode.copyTo(node, data.hitMode); }"),
-            ],
-            [
-                'glyph' => [
-                    'map' => [
-                        'doc' => 'glyphicon glyphicon-file',
-                        'docOpen' => 'glyphicon glyphicon-file',
-                        'checkbox' => 'glyphicon glyphicon-unchecked',
-                        'checkboxSelected' => 'glyphicon glyphicon-check',
-                        'checkboxUnknown' => 'glyphicon glyphicon-share',
-                        'dragHelper' => 'glyphicon glyphicon-play',
-                        'dropMarker' => 'glyphicon glyphicon-arrow-right',
-                        'error' => 'glyphicon glyphicon-warning-sign',
-                        'expanderClosed' => 'glyphicon glyphicon-menu-right',
-                        'expanderLazy' => 'glyphicon glyphicon-menu-right',
-                        'expanderOpen' => 'glyphicon glyphicon-menu-down',
-                        'folder' => 'glyphicon glyphicon-folder-close',
-                        'folderOpen' => 'glyphicon glyphicon-folder-open',
-                        'loading' => 'glyphicon glyphicon-refresh glyphicon-spin'
-                    ],
+            'glyph' => [
+                'map' => [
+                    'doc' => 'glyphicon glyphicon-file',
+                    'docOpen' => 'glyphicon glyphicon-file',
+                    'checkbox' => 'glyphicon glyphicon-unchecked',
+                    'checkboxSelected' => 'glyphicon glyphicon-check',
+                    'checkboxUnknown' => 'glyphicon glyphicon-share',
+                    'dragHelper' => 'glyphicon glyphicon-play',
+                    'dropMarker' => 'glyphicon glyphicon-arrow-right',
+                    'error' => 'glyphicon glyphicon-warning-sign',
+                    'expanderClosed' => 'glyphicon glyphicon-menu-right',
+                    'expanderLazy' => 'glyphicon glyphicon-menu-right',
+                    'expanderOpen' => 'glyphicon glyphicon-menu-down',
+                    'folder' => 'glyphicon glyphicon-folder-close',
+                    'folderOpen' => 'glyphicon glyphicon-folder-open',
+                    'loading' => 'glyphicon glyphicon-refresh glyphicon-spin',
                 ],
             ],
             'source' => [
                 'url' => $this->url,
-                'debugDelay' => 1000,
             ],
             'icon' => new JsExpression("function(event, data) {
                 // if( data.node.isFolder() ) {
@@ -81,8 +118,7 @@ class Fancytree extends \yii\base\Widget
                 data.result = {
                     url: '" . $this->url . "',
                     data: { id: node.key },
-                    cache: false,
-                    debugDelay: 1000
+                    cache: false
                 };
             }"),
         ]);
@@ -106,7 +142,7 @@ class Fancytree extends \yii\base\Widget
 
         $view->registerJs("jQuery('#$id').fancytree($options);");
 
-        return Html::tag('div', 'test', ['id' => $id]);
+        return Html::tag('div', '', ['id' => $id]);
 
         echo "<pre>";
         print_r($this->options);
